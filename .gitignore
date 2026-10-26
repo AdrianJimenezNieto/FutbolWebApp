@@ -1,0 +1,36 @@
+# AppHtml
+AppHtml/global.asa
+
+# AppSrc: generados al compilar
+AppSrc/**/*.dep
+AppSrc/**/*.err
+AppSrc/**/*.fld
+AppSrc/**/*.pbg
+AppSrc/**/*.pdp
+AppSrc/**/*.pkd
+AppSrc/**/*.prn
+AppSrc/**/*.prp
+AppSrc/**/*.exe.manifest
+
+# Data: datos e índices de las tablas embebidas
+Data/**/*.dat
+Data/**/*.log
+Data/**/*.vld
+Data/**/*.bad
+Data/**/*.hdr
+Data/**/*.cch
+Data/**/*.k*
+
+# DDSrc
+DDSrc/**/*.def
+
+# IdeSrc: estado del IDE
+IdeSrc/**/*.dsk
+IdeSrc/**/*.loc
+IdeSrc/**/*.mtd
+
+# Programs: compilados y depuración
+Programs/**/*.exe
+Programs/**/*.exe.manifest
+Programs/**/*.dbg
+Programs/**/*.log
