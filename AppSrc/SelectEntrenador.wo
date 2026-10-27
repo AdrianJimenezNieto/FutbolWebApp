@@ -45,17 +45,18 @@ Object oSelectEntrenador is a cWebView
         Set pbShowHeader to False
         Set piSortColumn to 0
 
+        Object oentrenadorApellido is a cWebColumn
+            Entry_Item entrenador.Apellido
+            Set psCaption to "entrenador.Apellido"
+            Set piWidth to 600
+        End_Object 
+        
         Object oentrenadorNombre is a cWebColumn
             Entry_Item entrenador.Nombre
             Set psCaption to "entrenador.Nombre"
             Set piWidth to 600
         End_Object 
 
-        Object oentrenadorApellido is a cWebColumn
-            Entry_Item entrenador.Apellido
-            Set psCaption to "entrenador.Apellido"
-            Set piWidth to 600
-        End_Object 
 
         Object oequipoNombre is a cWebColumn
             Entry_Item equipo.Nombre
