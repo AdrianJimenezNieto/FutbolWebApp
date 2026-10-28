@@ -21,15 +21,15 @@ Object oSelectEquipo is a cWebView
     Set pbShowCaption to False
     Set piMaxWidth to 1024
 
-    Object oliga_DD is a cligaDataDictionary
+    Object oLiga_DD is a cligaDataDictionary
     End_Object 
 
-    Object oequipo_DD is a cequipoDataDictionary
-        Set DDO_Server To oliga_DD
+    Object oEquipo_DD is a cequipoDataDictionary
+        Set DDO_Server To oLiga_DD
     End_Object 
 
-    Set Main_DD To oequipo_DD
-    Set Server  To oequipo_DD
+    Set Main_DD To oEquipo_DD
+    Set Server  To oEquipo_DD
 
 
     Object oList is a cWebList
@@ -40,13 +40,13 @@ Object oSelectEquipo is a cWebView
         Set pbShowHeader to False
         Set piSortColumn to 0
 
-        Object oequipoNombre is a cWebColumn
+        Object oEquipoNombre is a cWebColumn
             Entry_Item equipo.Nombre
             Set psCaption to "equipo.Nombre"
             Set piWidth to 1201
         End_Object 
 
-        Object oligaID is a cWebColumn
+        Object oLigaID is a cWebColumn
             Entry_Item liga.Nombre
             Set psCaption to "equipo.Nombre"
             Set piWidth to 100
