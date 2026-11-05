@@ -7,8 +7,11 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebButton.pkg
+Use cWebColumn.pkg
 
 Use cligaDataDictionary.dd
+Use cequipoDataDictionary.dd
 
 Object oZoomLiga is a cWebView
     Set piColumnCount to 12
@@ -23,8 +26,12 @@ Object oZoomLiga is a cWebView
     End_Object 
 
     Set Main_DD To oLiga_DD
-    Set Server  To oLiga_DD
-
+    Set Server  to oLiga_DD
+    
+    Object oEquipo_DD is a cequipoDataDictionary
+        Set DDO_Server to oLiga_DD
+        Set Constrain_File to liga.File_Number
+    End_Object
 
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
@@ -61,6 +68,46 @@ Object oZoomLiga is a cWebView
             Set peLabelPosition to lpTop
             Set psLabel to "N° Equipos"
         End_Object 
+        
+        Object oEquiposBtn is a cWebButton
+            Set psCaption to "Ver equipos"
+            Set piColumnSpan to 4
+            Set piColumnIndex to 0
+            
+            WebRegisterPath ntNavigateForward oSelectEquipo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oEquiposList is a cWebList
+            Set Server to oEquipo_DD
+            Set piColumnSpan to 12
+            Set piColumnIndex to 0
+            Set piMinHeight to 200
+            Set pbScroll to False
+            Set pbShowHeader to False
+            Set psCSSClass to "MobileList"
+            Set psPlaceHolder to "Esta liga no tiene equipos"
+            Set pbServerOnRowClick to True
+            
+            Object oEquipoNombre is a cWebColumn
+                Entry_Item equipo.Nombre
+                Set psCaption to "Equipo"
+                Set piWidth to 500
+            End_Object
+            
+            WebRegisterPath ntNavigateForward oZoomEquipo
+            
+            Procedure OnRowClick String sRowId
+                Send NavigatePath
+            End_Procedure
+            
+            Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+                Move True to NavigateData.bReadOnly
+            End_Procedure
+        End_Object
     End_Object 
 
     Object oActionGroup is a cWebMenuGroup
@@ -109,7 +156,8 @@ Object oZoomLiga is a cWebView
 
     Procedure SetActionButtons
         tWebNavigateData NavigateData
-        Boolean bHasRecord
+        Boolean bHasRecord bPuede
+        String sMotivo
         Handle hoDD
 
         Get Server to hoDD
@@ -121,6 +169,13 @@ Object oZoomLiga is a cWebView
         WebSet pbRender of oSaveBtn to False
         WebSet pbRender of oCancelChangesBtn to False
         WebSet pbRender of oDeleteBtn to False
+        
+        Get CanPushView of ghoWebViewStack oSelectEquipo (&sMotivo) to bPuede
+        WebSet pbRender of oEquiposBtn to (bHasRecord and bPuede)
+        
+        Get CanPushView of ghoWebViewStack oZoomEquipo (&sMotivo) to bPuede
+        WebSet pbRender of oEquiposList to bHasRecord
+        WebSet pbServerOnRowClick of oEquiposList to bPuede
 
         If (NavigateData.bReadOnly) Begin
             WebSet pbRender of oEditBtn to True
