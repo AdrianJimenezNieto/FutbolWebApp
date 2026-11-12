@@ -15,3 +15,45 @@
     line-height: 50px;
     letter-spacing: 1px;
 }
+
+/* ---------- Tarjetas del Dashboard ---------- */
+
+/* Cada tarjeta lleva su clase (TileLiga, TileEquipo...) puesta en el psCSSClass */
+.Tile .WebCon_Sizer {
+    border-radius: 8px;
+    color: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.Tile .WebCon_Sizer:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.Tile .Tile_Title {
+    font-weight: bold;
+}
+
+.Tile .Tile_Subtitle {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.TileLiga .WebCon_Sizer {
+    background: #1b5e20;
+}
+
+.TileEquipo .WebCon_Sizer {
+    background: #2e7d32;
+}
+
+.TilePosicion .WebCon_Sizer {
+    background: #00796b;
+}
+
+.TileEntrenador .WebCon_Sizer {
+    background: #37474f;
+}
+
+.TileJugador .WebCon_Sizer {
+    background: #f9a825;
+}
