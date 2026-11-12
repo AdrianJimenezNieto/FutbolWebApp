@@ -83,3 +83,20 @@
     font-size: 15px;
     color: #5c5c5c;
 }
+
+/* ---------- Listas de las Select ---------- */
+
+.MobileList .WebList_Body .WebList_Row {
+    cursor: pointer;
+}
+
+.MobileList .WebList_Body .WebList_Row:hover {
+    background-color: #e8f5e9;
+}
+
+/* La fila seleccionada en verde en vez del azul del tema */
+.WebList > div > div > div > div > .WebList_Body.WebList_ShowSelected > .WebList_Row.WebList_Selected,
+.WebList > div > div > div > div > .WebList_Body.WebList_ShowSelected > div > div > .WebList_Row.WebList_Selected {
+    background-color: #c8e6c9;
+    border-left: 3px solid #2e7d32;
+}
