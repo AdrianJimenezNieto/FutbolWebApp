@@ -57,3 +57,29 @@
 .TileJugador .WebCon_Sizer {
     background: #f9a825;
 }
+
+/* ---------- Bienvenida del Dashboard ---------- */
+
+.Bienvenida {
+    margin-top: 43px;
+}
+
+.Bienvenida .WebHtml_Box {
+    border: none;
+    border-left: 5px solid #2e7d32;
+    background: #ffffff;
+    padding: 20px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.Bienvenida_Titulo {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    color: #1b5e20;
+}
+
+.Bienvenida_Texto {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    color: #5c5c5c;
+}
