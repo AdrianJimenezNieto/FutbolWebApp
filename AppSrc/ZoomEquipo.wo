@@ -7,12 +7,15 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebHtmlBox.pkg
+Use cWebGroup.pkg
 
 Use cligaDataDictionary.dd
 Use cequipoDataDictionary.dd
 
 Object oZoomEquipo is a cWebView
     Set piColumnCount to 12
+    Set psCSSClass to "Zoom ZoomEquipo"
     Set psCaption to "Equipo"
     Set peWebViewStyle to wvsDrilldown
     Set peViewType to vtZoom
@@ -35,48 +38,73 @@ Object oZoomEquipo is a cWebView
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 4
 
-        Object oEquipoNombre is a cWebForm
-            Entry_Item equipo.Nombre
+        Object oCabecera is a cWebHtmlBox
             Set piColumnSpan to 12
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Nombre"
-        End_Object 
+            Set psCSSClass to "ZoomCabecera"
+            Set psHtml to "<div class='ZoomCabecera_Titulo'>Equipo</div><div class='ZoomCabecera_Texto'>Ficha del equipo y de su liga</div>"
+        End_Object
 
-        Object oLigaNombre is a cWebForm
-            Entry_Item liga.Nombre
+        Object oDatosGroup is a cWebGroup
             Set piColumnSpan to 12
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Liga"
-            Set pbPromptButton to True
+            Set piColumnCount to 12
+            Set psCaption to "Datos del equipo"
+            Set psCSSClass to "ZoomBloque"
+            WebSetResponsive piColumnCount rmMobile to 4
 
-            WebRegisterPath ntNavigateForward oSelectLiga
+            Object oEquipoNombre is a cWebForm
+                Entry_Item equipo.Nombre
+                Set piColumnSpan to 8
+                Set piColumnIndex to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "Nombre"
+            End_Object
+        End_Object
 
-            Procedure OnPrompt
-                Send NavigatePath
-            End_Procedure
-        End_Object 
+        Object oLigaGroup is a cWebGroup
+            Set piColumnSpan to 12
+            Set piColumnCount to 12
+            Set psCaption to "Liga"
+            Set psCSSClass to "ZoomBloque"
+            WebSetResponsive piColumnCount rmMobile to 4
 
-        Object oLigaPais is a cWebForm
-            Entry_Item liga.Pais
-            Set piColumnSpan to 9
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Pais"
-            Set pbPromptButton to False
+            Object oLigaNombre is a cWebForm
+                Entry_Item liga.Nombre
+                Set piColumnSpan to 8
+                Set piColumnIndex to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "Liga"
+                Set psCSSClass to "CampoPadre"
+                Set pbPromptButton to True
 
-            Procedure OnPrompt
-                Send NavigatePath
-            End_Procedure
-        End_Object 
-    End_Object 
+                WebRegisterPath ntNavigateForward oSelectLiga
+
+                Procedure OnPrompt
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+
+            Object oLigaPais is a cWebForm
+                Entry_Item liga.Pais
+                Set piColumnSpan to 4
+                Set piColumnIndex to 8
+                WebSetResponsive piColumnIndex rmMobile to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "País"
+                Set psCSSClass to "CampoPadre"
+                Set pbPromptButton to False
+
+                Procedure OnPrompt
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        End_Object
+    End_Object
 
     Object oActionGroup is a cWebMenuGroup
 
         Object oSaveBtn is a cWebMenuItem
             Set psCSSClass to "WebSaveMenuItem"
-            Set psCaption to "Save"
+            Set psCaption to "Guardar"
 
             Procedure OnClick
                 Send Request_Save
@@ -86,7 +114,7 @@ Object oZoomEquipo is a cWebView
 
         Object oEditBtn is a cWebMenuItem
             Set psCSSClass to "WebEditMenuItem"
-            Set psCaption to "Edit"
+            Set psCaption to "Editar"
             Procedure OnClick
                 Send ChangeEditMode True
                 Send SetActionButtons
@@ -96,7 +124,7 @@ Object oZoomEquipo is a cWebView
 
         Object oDeleteBtn is a cWebMenuItem
             Set psCSSClass to "WebDeleteMenuItem"
-            Set psCaption to "Delete"
+            Set psCaption to "Eliminar"
             Set peActionDisplay to adMenu
 
             Procedure OnClick
@@ -107,7 +135,7 @@ Object oZoomEquipo is a cWebView
 
         Object oCancelChangesBtn is a cWebMenuItem
             Set psCSSClass to "WebIcon_Refresh"
-            Set psCaption to "Clear Changes"
+            Set psCaption to "Deshacer cambios"
             Set peActionDisplay to adMenu
             Procedure OnClick
                 Send RefreshRecord

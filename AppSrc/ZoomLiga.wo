@@ -7,6 +7,8 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebHtmlBox.pkg
+Use cWebGroup.pkg
 Use cWebButton.pkg
 Use cWebColumn.pkg
 
@@ -15,6 +17,7 @@ Use cequipoDataDictionary.dd
 
 Object oZoomLiga is a cWebView
     Set piColumnCount to 12
+    Set psCSSClass to "Zoom ZoomLiga"
     Set psCaption to "Liga"
     Set peWebViewStyle to wvsDrilldown
     Set peViewType to vtZoom
@@ -37,84 +40,111 @@ Object oZoomLiga is a cWebView
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 4
 
-        Object oLigaNombre is a cWebForm
-            Entry_Item liga.Nombre
+        Object oCabecera is a cWebHtmlBox
             Set piColumnSpan to 12
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Nombre"
-        End_Object 
-
-        Object oLigaPais is a cWebForm
-            Entry_Item liga.Pais
-            Set piColumnSpan to 8
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Pais"
-        End_Object 
-
-        Object oLigaEquipos is a cWebForm
-            Entry_Item liga.Equipos
-            Set piColumnSpan to 2
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Equipos"
-        End_Object 
-
-        Object oLigaEquiposMax is a cWebForm
-            Entry_Item liga.EquiposMax
-            Set piColumnSpan to 2
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "N° Equipos"
-        End_Object 
-        
-        Object oEquiposBtn is a cWebButton
-            Set psCaption to "Ver equipos"
-            Set piColumnSpan to 4
-            Set piColumnIndex to 0
-            
-            WebRegisterPath ntNavigateForward oSelectEquipo
-            
-            Procedure OnClick
-                Send NavigatePath
-            End_Procedure
+            Set psCSSClass to "ZoomCabecera"
+            Set psHtml to "<div class='ZoomCabecera_Titulo'>Liga</div><div class='ZoomCabecera_Texto'>Ficha de la liga y de sus equipos</div>"
         End_Object
-        
-        Object oEquiposList is a cWebList
-            Set Server to oEquipo_DD
+
+        Object oDatosGroup is a cWebGroup
             Set piColumnSpan to 12
-            Set piColumnIndex to 0
-            Set piMinHeight to 200
-            Set pbScroll to False
-            Set pbShowHeader to False
-            Set psCSSClass to "MobileList"
-            Set psPlaceHolder to "Esta liga no tiene equipos"
-            Set pbServerOnRowClick to True
-            
-            Object oEquipoNombre is a cWebColumn
-                Entry_Item equipo.Nombre
-                Set psCaption to "Equipo"
-                Set piWidth to 500
+            Set piColumnCount to 12
+            Set psCaption to "Datos de la liga"
+            Set psCSSClass to "ZoomBloque"
+            WebSetResponsive piColumnCount rmMobile to 4
+
+            Object oLigaNombre is a cWebForm
+                Entry_Item liga.Nombre
+                Set piColumnSpan to 8
+                Set piColumnIndex to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "Nombre"
             End_Object
-            
-            WebRegisterPath ntNavigateForward oZoomEquipo
-            
-            Procedure OnRowClick String sRowId
-                Send NavigatePath
-            End_Procedure
-            
-            Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
-                Move True to NavigateData.bReadOnly
-            End_Procedure
+
+            Object oLigaPais is a cWebForm
+                Entry_Item liga.Pais
+                Set piColumnSpan to 4
+                Set piColumnIndex to 8
+                WebSetResponsive piColumnIndex rmMobile to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "País"
+            End_Object
+
+            Object oLigaEquipos is a cWebForm
+                Entry_Item liga.Equipos
+                Set piColumnSpan to 3
+                Set piColumnIndex to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "Equipos"
+                WebSetResponsive piColumnSpan rmMobile to 2
+            End_Object
+
+            Object oLigaEquiposMax is a cWebForm
+                Entry_Item liga.EquiposMax
+                Set piColumnSpan to 3
+                Set piColumnIndex to 3
+                WebSetResponsive piColumnIndex rmMobile to 2
+                Set peLabelPosition to lpTop
+                Set psLabel to "Máximo de equipos"
+                WebSetResponsive piColumnSpan rmMobile to 2
+            End_Object
         End_Object
-    End_Object 
+
+        Object oEquiposGroup is a cWebGroup
+            Set piColumnSpan to 12
+            Set piColumnCount to 12
+            Set psCaption to "Equipos de la liga"
+            Set psCSSClass to "ZoomBloque"
+            WebSetResponsive piColumnCount rmMobile to 4
+
+            Object oEquiposBtn is a cWebButton
+                Set psCaption to "Ver equipos"
+                Set piColumnSpan to 4
+                Set piColumnIndex to 0
+                Set psCSSClass to "BotonNav"
+
+                WebRegisterPath ntNavigateForward oSelectEquipo
+
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+
+            Object oEquiposList is a cWebList
+                Set Server to oEquipo_DD
+                Set piColumnSpan to 12
+                Set piColumnIndex to 0
+                Set piMinHeight to 200
+                Set pbScroll to False
+                Set pbShowHeader to False
+                Set psCSSClass to "MobileList"
+                Set psPlaceHolder to "Esta liga no tiene equipos"
+                Set pbServerOnRowClick to True
+
+                Object oEquipoNombre is a cWebColumn
+                    Entry_Item equipo.Nombre
+                    Set psCaption to "Equipo"
+                    Set piWidth to 500
+                End_Object
+
+                WebRegisterPath ntNavigateForward oZoomEquipo
+
+                Procedure OnRowClick String sRowId
+                    Send NavigatePath
+                End_Procedure
+
+                Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+                    Move True to NavigateData.bReadOnly
+                End_Procedure
+            End_Object
+        End_Object
+    End_Object
 
     Object oActionGroup is a cWebMenuGroup
 
         Object oSaveBtn is a cWebMenuItem
             Set psCSSClass to "WebSaveMenuItem"
-            Set psCaption to "Save"
+            Set psCaption to "Guardar"
 
             Procedure OnClick
                 Send Request_Save
@@ -124,7 +154,7 @@ Object oZoomLiga is a cWebView
 
         Object oEditBtn is a cWebMenuItem
             Set psCSSClass to "WebEditMenuItem"
-            Set psCaption to "Edit"
+            Set psCaption to "Editar"
             Procedure OnClick
                 Send ChangeEditMode True
                 Send SetActionButtons
@@ -134,7 +164,7 @@ Object oZoomLiga is a cWebView
 
         Object oDeleteBtn is a cWebMenuItem
             Set psCSSClass to "WebDeleteMenuItem"
-            Set psCaption to "Delete"
+            Set psCaption to "Eliminar"
             Set peActionDisplay to adMenu
 
             Procedure OnClick
@@ -145,7 +175,7 @@ Object oZoomLiga is a cWebView
 
         Object oCancelChangesBtn is a cWebMenuItem
             Set psCSSClass to "WebIcon_Refresh"
-            Set psCaption to "Clear Changes"
+            Set psCaption to "Deshacer cambios"
             Set peActionDisplay to adMenu
             Procedure OnClick
                 Send RefreshRecord

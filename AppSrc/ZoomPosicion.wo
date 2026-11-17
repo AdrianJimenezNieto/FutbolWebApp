@@ -7,11 +7,14 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebHtmlBox.pkg
+Use cWebGroup.pkg
 
 Use cposicionDataDictionary.dd
 
 Object oZoomPosicion is a cWebView
     Set piColumnCount to 12
+    Set psCSSClass to "Zoom ZoomPosicion"
     Set psCaption to "Posicion"
     Set peWebViewStyle to wvsDrilldown
     Set peViewType to vtZoom
@@ -30,20 +33,34 @@ Object oZoomPosicion is a cWebView
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 4
 
-        Object oPosicionNombre is a cWebForm
-            Entry_Item posicion.Nombre
-            Set piColumnSpan to 8
-            Set piColumnIndex to 0
-            Set peLabelPosition to lpTop
-            Set psLabel to "Nombre"
-        End_Object 
-    End_Object 
+        Object oCabecera is a cWebHtmlBox
+            Set piColumnSpan to 12
+            Set psCSSClass to "ZoomCabecera"
+            Set psHtml to "<div class='ZoomCabecera_Titulo'>Posición</div><div class='ZoomCabecera_Texto'>Posición en el campo</div>"
+        End_Object
+
+        Object oDatosGroup is a cWebGroup
+            Set piColumnSpan to 12
+            Set piColumnCount to 12
+            Set psCaption to "Datos de la posición"
+            Set psCSSClass to "ZoomBloque"
+            WebSetResponsive piColumnCount rmMobile to 4
+
+            Object oPosicionNombre is a cWebForm
+                Entry_Item posicion.Nombre
+                Set piColumnSpan to 6
+                Set piColumnIndex to 0
+                Set peLabelPosition to lpTop
+                Set psLabel to "Nombre"
+            End_Object
+        End_Object
+    End_Object
 
     Object oActionGroup is a cWebMenuGroup
 
         Object oSaveBtn is a cWebMenuItem
             Set psCSSClass to "WebSaveMenuItem"
-            Set psCaption to "Save"
+            Set psCaption to "Guardar"
 
             Procedure OnClick
                 Send Request_Save
@@ -53,7 +70,7 @@ Object oZoomPosicion is a cWebView
 
         Object oEditBtn is a cWebMenuItem
             Set psCSSClass to "WebEditMenuItem"
-            Set psCaption to "Edit"
+            Set psCaption to "Editar"
             Procedure OnClick
                 Send ChangeEditMode True
                 Send SetActionButtons
@@ -63,7 +80,7 @@ Object oZoomPosicion is a cWebView
 
         Object oDeleteBtn is a cWebMenuItem
             Set psCSSClass to "WebDeleteMenuItem"
-            Set psCaption to "Delete"
+            Set psCaption to "Eliminar"
             Set peActionDisplay to adMenu
 
             Procedure OnClick
@@ -74,7 +91,7 @@ Object oZoomPosicion is a cWebView
 
         Object oCancelChangesBtn is a cWebMenuItem
             Set psCSSClass to "WebIcon_Refresh"
-            Set psCaption to "Clear Changes"
+            Set psCaption to "Deshacer cambios"
             Set peActionDisplay to adMenu
             Procedure OnClick
                 Send RefreshRecord
