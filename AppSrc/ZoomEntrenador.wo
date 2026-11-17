@@ -96,6 +96,7 @@ Object oZoomEntrenador is a cWebView
                 Set peLabelPosition to lpTop
                 Set psLabel to "Equipo"
                 Set psCSSClass to "CampoPadre"
+                Set psPlaceHolder to "Sin equipo"
                 Set pbPromptButton to True
 
                 WebRegisterPath ntNavigateForward oSelectEquipo
@@ -121,6 +122,18 @@ Object oZoomEntrenador is a cWebView
         End_Object
     End_Object
 
+    // Deja al entrenador sin equipo: se vacía el DDO del equipo y se guarda.
+    // La clase DD admite el padre nulo y manda EquipoID como NULL.
+    Procedure DespedirConfirmado Integer eRespuesta
+        If (eRespuesta = cmYes) Begin
+            Send Request_ClearBindingTable of oEquipoNombre
+            Send Request_Save of oEntrenador_DD
+            Send SetActionButtons
+        End
+    End_Procedure
+
+    WebPublishProcedure DespedirConfirmado
+
     Object oActionGroup is a cWebMenuGroup
 
         Object oSaveBtn is a cWebMenuItem
@@ -142,6 +155,18 @@ Object oZoomEntrenador is a cWebView
             End_Procedure
 
         End_Object 
+
+        Object oDespedirBtn is a cWebMenuItem
+            Set psCSSClass to "WebIcon_Clear"
+            Set psCaption to "Despedir"
+
+            Procedure OnClick
+                Send ShowYesNo Self (RefProc(DespedirConfirmado)) ;
+                    (SFormat("¿Despedir a %1 %2? Se quedará sin equipo.", Trim(entrenador.Nombre), Trim(entrenador.Apellido))) ;
+                    "Despedir entrenador"
+            End_Procedure
+
+        End_Object
 
         Object oDeleteBtn is a cWebMenuItem
             Set psCSSClass to "WebDeleteMenuItem"
@@ -167,12 +192,16 @@ Object oZoomEntrenador is a cWebView
 
     Procedure SetActionButtons
         tWebNavigateData NavigateData
-        Boolean bHasRecord
+        Boolean bHasRecord bTieneEquipo
         Handle hoDD
 
         Get Server to hoDD
         Get GetNavigateData to NavigateData
         Get HasRecord of hoDD to bHasRecord
+        Get HasRecord of oEquipo_DD to bTieneEquipo
+
+        // Despedir solo tiene sentido con un entrenador guardado que tenga equipo
+        WebSet pbRender of oDespedirBtn to (bHasRecord and bTieneEquipo)
 
         // let's hide all buttons and then Show the ones we want
         WebSet pbRender of oEditBtn to False
