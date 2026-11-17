@@ -1,4 +1,5 @@
 ﻿Use DataDict.pkg
+Use NacionalidadValidationTable.pkg
 Use cli.pkg
 
 Open entrenador
@@ -28,6 +29,9 @@ Class centrenadorDataDictionary is a DataDictionary
         // Columnas NOT NULL en la base de datos
         Set Field_Option Field entrenador.Nombre DD_REQUIRED to True
         Set Field_Option Field entrenador.Apellido DD_REQUIRED to True
+
+        // Nacionalidad solo de la lista de CodeMast
+        Set Field_Value_Table Field entrenador.Nacionalidad to oNacionalidad_VT
 
     End_Procedure
 

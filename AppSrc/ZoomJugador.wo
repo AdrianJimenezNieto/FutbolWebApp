@@ -7,6 +7,7 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebCombo.pkg
 Use cWebHtmlBox.pkg
 Use cWebGroup.pkg
 Use cWebButton.pkg
@@ -74,12 +75,14 @@ Object oZoomJugador is a cWebView
                 Set psLabel to "Apellido"
             End_Object
 
-            Object oJugadorNacionalidad is a cWebForm
+            // Desplegable: las opciones salen de la validation table de la clase DD
+            Object oJugadorNacionalidad is a cWebCombo
                 Entry_Item jugador.Nacionalidad
                 Set piColumnSpan to 6
                 Set piColumnIndex to 0
                 Set peLabelPosition to lpTop
                 Set psLabel to "Nacionalidad"
+                Set psEmptyItemDescription to "Sin nacionalidad"
             End_Object
         End_Object
 
