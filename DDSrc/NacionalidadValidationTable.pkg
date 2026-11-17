@@ -1,0 +1,14 @@
+﻿Use DataDict.pkg
+
+// Lista de nacionalidades para jugador y entrenador.
+// Los valores están en CodeMast con Type = 'NACION' (script Sql/nacionalidades.sql).
+// El código es la propia nacionalidad, que es lo que se guarda en la columna Nacionalidad.
+
+Register_Object oNacionalidad_VT
+
+Object oNacionalidad_VT is a CodeValidationTable
+    Set Type_Value to "NACION"
+    Set Table_Title to "Nacionalidades"
+    // La columna admite NULL: se puede dejar sin nacionalidad
+    Set Allow_Blank_State to True
+End_Object
