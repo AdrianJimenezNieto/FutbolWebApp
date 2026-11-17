@@ -55,8 +55,8 @@ Object oDashboard is a cWebView
             // Liga
             Object oLigaTile is a cWebHtmlBox
                 Set piColumnSpan to 6
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Ligas</div><div class="Tile_Subtitle"></div></div>'
-                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Ligas</div><div class="Tile_Subtitle">Competiciones</div></div>'
+                Set psCSSClass to "Tile TileLiga"
                 Set pbServerOnClick to True
                 
                 WebRegisterPath ntNavigateForward oSelectLiga
@@ -72,8 +72,8 @@ Object oDashboard is a cWebView
             Object oEquipoTile is a cWebHtmlBox
                 Set piColumnIndex to 6
                 Set piColumnSpan to 6
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Equipos</div><div class="Tile_Subtitle"></div></div>'
-                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Equipos</div><div class="Tile_Subtitle">Clubes de cada liga</div></div>'
+                Set psCSSClass to "Tile TileEquipo"
                 Set pbServerOnClick to True
                 
                 // Registro la ruta del Select
@@ -87,8 +87,8 @@ Object oDashboard is a cWebView
             // Posicion
             Object oPosicionTile is a cWebHtmlBox
                 Set piColumnSpan to 6
-                Set psHtml to '<div Class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Posiciones</div><div Class="Tile_Subtitle"></div></div>'
-                Set psCSSClass to "Tile"
+                Set psHtml to '<div Class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Posiciones</div><div Class="Tile_Subtitle">Puestos en el campo</div></div>'
+                Set psCSSClass to "Tile TilePosicion"
                 Set pbServerOnClick to True
                 
                 // Registro la ruta del Select
@@ -103,8 +103,8 @@ Object oDashboard is a cWebView
             Object oEntrenadorTile is a cWebHtmlBox
                 Set piColumnIndex to 6
                 Set piColumnSpan to 6
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Entrenadores</div><div class="Tile_Subtitle"></div></div>'
-                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Entrenadores</div><div class="Tile_Subtitle">Cuerpo técnico</div></div>'
+                Set psCSSClass to "Tile TileEntrenador"
                 Set pbServerOnClick to True
                 
                 // Registro la ruta del Select
@@ -118,8 +118,8 @@ Object oDashboard is a cWebView
             // Jugador (ocupa el ancho completo
             Object oJugadorTile is a cWebHtmlBox
                 Set piColumnSpan to 12
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Jugadores</div><div class="Tile_Subtitle"></div></div>'
-                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Jugadores</div><div class="Tile_Subtitle">Plantillas de los equipos</div></div>'
+                Set psCSSClass to "Tile TileJugador"
                 Set pbServerOnClick to True
                 
                 // Registro la ruta del Select
@@ -131,7 +131,22 @@ Object oDashboard is a cWebView
             End_Object
 
         End_Object
-    
+
+        // Bloque de bienvenida a la derecha de las tarjetas
+        Object oBienvenida is a cWebHtmlBox
+            Set piColumnIndex to 8
+            Set piColumnSpan to 16
+            WebSetResponsive piColumnIndex rmTabletPortrait to 8
+            WebSetResponsive piColumnSpan rmTabletPortrait to 8
+            WebSetResponsive piColumnIndex rmMobile to 0
+            WebSetResponsive piColumnSpan rmMobile to 1
+            Set psCSSClass to "Bienvenida"
+            Set psHtml to ('<h1 class="Bienvenida_Titulo">Bienvenido a FutbolWebApp</h1>' + ;
+                '<p class="Bienvenida_Texto">Desde aquí puedes consultar y editar las ligas, los equipos, ' + ;
+                'los entrenadores, los jugadores y sus posiciones.</p>' + ;
+                '<p class="Bienvenida_Texto">Pulsa en una de las tarjetas para empezar.</p>')
+        End_Object
+
     End_Object
     
     Procedure OnBeforeShow

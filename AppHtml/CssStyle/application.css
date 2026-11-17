@@ -1,0 +1,166 @@
+/* Estilos propios de FutbolWebApp (van despues del tema Df_Material) */
+
+/* ---------- Cabecera ---------- */
+
+/* Quito el borde y el padding que trae el tema en los cWebHtmlBox */
+.AppTitulo .WebHtml_Box {
+    border: none;
+    padding: 0;
+}
+
+.AppTitulo_Nombre {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 50px;
+    letter-spacing: 1px;
+}
+
+/* ---------- Tarjetas del Dashboard ---------- */
+
+/* Cada tarjeta lleva su clase (TileLiga, TileEquipo...) puesta en el psCSSClass */
+.Tile .WebCon_Sizer {
+    border-radius: 8px;
+    color: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.Tile .WebCon_Sizer:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.Tile .Tile_Title {
+    font-weight: bold;
+}
+
+.Tile .Tile_Subtitle {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.TileLiga .WebCon_Sizer {
+    background: #1b5e20;
+}
+
+.TileEquipo .WebCon_Sizer {
+    background: #2e7d32;
+}
+
+.TilePosicion .WebCon_Sizer {
+    background: #00796b;
+}
+
+.TileEntrenador .WebCon_Sizer {
+    background: #37474f;
+}
+
+.TileJugador .WebCon_Sizer {
+    background: #f9a825;
+}
+
+/* ---------- Bienvenida del Dashboard ---------- */
+
+.Bienvenida {
+    margin-top: 43px;
+}
+
+.Bienvenida .WebHtml_Box {
+    border: none;
+    border-left: 5px solid #2e7d32;
+    background: #ffffff;
+    padding: 20px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.Bienvenida_Titulo {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    color: #1b5e20;
+}
+
+.Bienvenida_Texto {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    color: #5c5c5c;
+}
+
+/* ---------- Listas de las Select ---------- */
+
+.MobileList .WebList_Body .WebList_Row {
+    cursor: pointer;
+}
+
+.MobileList .WebList_Body .WebList_Row:hover {
+    background-color: #e8f5e9;
+}
+
+/* La fila seleccionada en verde en vez del azul del tema */
+.WebList > div > div > div > div > .WebList_Body.WebList_ShowSelected > .WebList_Row.WebList_Selected,
+.WebList > div > div > div > div > .WebList_Body.WebList_ShowSelected > div > div > .WebList_Row.WebList_Selected {
+    background-color: #c8e6c9;
+    border-left: 3px solid #2e7d32;
+}
+
+/* ---------- Vistas Zoom ---------- */
+
+/* Cada Zoom lleva Zoom + su tabla en el psCSSClass de la vista,
+   con el mismo color que su tarjeta del Dashboard */
+.ZoomLiga       { --zoom-color: #1b5e20; --zoom-texto: #ffffff; --zoom-acento: #1b5e20; }
+.ZoomEquipo     { --zoom-color: #2e7d32; --zoom-texto: #ffffff; --zoom-acento: #2e7d32; }
+.ZoomPosicion   { --zoom-color: #00796b; --zoom-texto: #ffffff; --zoom-acento: #00796b; }
+.ZoomEntrenador { --zoom-color: #37474f; --zoom-texto: #ffffff; --zoom-acento: #37474f; }
+.ZoomJugador    { --zoom-color: #f9a825; --zoom-texto: #3a2a00; --zoom-acento: #b26a00; }
+
+/* Franja de cabecera con el nombre de la tabla */
+.ZoomCabecera .WebHtml_Box {
+    border: none;
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 5px 5px 0 5px;
+    background: var(--zoom-color);
+    color: var(--zoom-texto);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.ZoomCabecera_Titulo {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.ZoomCabecera_Texto {
+    margin-top: 2px;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+/* Bloques de campos: tarjeta blanca con el borde superior del color de la tabla */
+.ZoomBloque.WebGrp_HasBorder > .WebCon_Inner > div > .WebContainer {
+    border-radius: 8px;
+    border-top: 4px solid var(--zoom-color);
+    background-color: #ffffff;
+}
+
+.ZoomBloque.WebGrp_HasCaption > .WebCon_Inner > div > .WebGrp_Caption {
+    color: var(--zoom-acento);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Campos de las tablas padre (los rellena el relate): fondo verde claro */
+.WebControl.CampoPadre > div > div > .WebFrm_Wrapper {
+    background-color: #e8f5e9;
+}
+
+/* Botones que navegan a otra vista, en el ambar del highlight */
+.WebButton.BotonNav button {
+    background-color: #f9a825;
+    color: #3a2a00;
+    font-weight: bold;
+}
+
+.WebButton.BotonNav.Web_Enabled button:hover,
+.WebButton.BotonNav.Web_Enabled button:focus {
+    background-color: #f57f17;
+    color: #3a2a00;
+}
