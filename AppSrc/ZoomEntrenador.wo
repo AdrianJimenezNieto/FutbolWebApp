@@ -127,10 +127,15 @@ Object oZoomEntrenador is a cWebView
 
     // Deja al entrenador sin equipo: se vacía el DDO del equipo y se guarda.
     // La clase DD admite el padre nulo y manda EquipoID como NULL.
+    // Tras despedir, la vista no se cierra al guardar (ver OnViewSaved)
+    Property Boolean pbDespidiendo False
+
     Procedure DespedirConfirmado Integer eRespuesta
         If (eRespuesta = cmYes) Begin
+            Set pbDespidiendo to True
             Send Request_ClearBindingTable of oEquipoNombre
             Send Request_Save of oEntrenador_DD
+            Set pbDespidiendo to False
             Send SetActionButtons
         End
     End_Procedure
@@ -195,16 +200,18 @@ Object oZoomEntrenador is a cWebView
 
     Procedure SetActionButtons
         tWebNavigateData NavigateData
-        Boolean bHasRecord bTieneEquipo
+        Boolean bHasRecord
+        Integer iEquipoID
         Handle hoDD
 
         Get Server to hoDD
         Get GetNavigateData to NavigateData
         Get HasRecord of hoDD to bHasRecord
-        Get HasRecord of oEquipo_DD to bTieneEquipo
+        // Se mira la FK del propio entrenador y no el DDO del equipo
+        Get Field_Current_Value of oEntrenador_DD Field entrenador.EquipoID to iEquipoID
 
         // Despedir solo tiene sentido con un entrenador guardado que tenga equipo
-        WebSet pbRender of oDespedirBtn to (bHasRecord and bTieneEquipo)
+        WebSet pbRender of oDespedirBtn to (bHasRecord and iEquipoID <> 0)
 
         // let's hide all buttons and then Show the ones we want
         WebSet pbRender of oEditBtn to False
@@ -223,8 +230,10 @@ Object oZoomEntrenador is a cWebView
     End_Procedure
 
     Procedure OnViewSaved Handle hoServer Boolean bChanged
-        // Close after save
-        Send NavigateClose Self
+        // Close after save, salvo al despedir: se queda abierta con «Sin equipo»
+        If (not(pbDespidiendo(Self))) Begin
+            Send NavigateClose Self
+        End
     End_Procedure
 
     // this will close the view after a delete
