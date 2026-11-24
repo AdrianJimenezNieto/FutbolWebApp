@@ -14,6 +14,8 @@ Class centrenadorDataDictionary is a DataDictionary
         Set Add_Server_File to equipo.File_Number
         // Un entrenador puede quedarse sin equipo (EquipoID admite NULL)
         Set ParentNullAllowed equipo.File_Number to True
+        // Al borrar el equipo, el entrenador no se borra: se queda sin equipo
+        Set CascadeDeleteNull equipo.File_Number to True
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
