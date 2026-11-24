@@ -7,6 +7,7 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebCombo.pkg
 Use cWebHtmlBox.pkg
 Use cWebGroup.pkg
 Use cWebButton.pkg
@@ -14,6 +15,8 @@ Use cWebButton.pkg
 Use cligaDataDictionary.dd
 Use cequipoDataDictionary.dd
 Use cjugadorDataDictionary.dd
+Use cposicionDataDictionary.dd
+Use cjugadorposicionDataDictionary.dd
 
 Object oZoomJugador is a cWebView
     Set piColumnCount to 12
@@ -35,6 +38,16 @@ Object oZoomJugador is a cWebView
     Object oJugador_DD is a cjugadorDataDictionary
         Set DDO_Server To oEquipo_DD
     End_Object 
+
+    // Posiciones del jugador: DataFlex las necesita en la vista para borrar en cascada
+    Object oPosicion_DD is a cposicionDataDictionary
+    End_Object
+
+    Object oJugadorPosicion_DD is a cjugadorposicionDataDictionary
+        Set DDO_Server to oJugador_DD
+        Set DDO_Server to oPosicion_DD
+        Set Constrain_File to jugador.File_Number
+    End_Object
 
     Set Main_DD To oJugador_DD
     Set Server  To oJugador_DD
@@ -74,12 +87,14 @@ Object oZoomJugador is a cWebView
                 Set psLabel to "Apellido"
             End_Object
 
-            Object oJugadorNacionalidad is a cWebForm
+            // Desplegable: las opciones salen de la validation table de la clase DD
+            Object oJugadorNacionalidad is a cWebCombo
                 Entry_Item jugador.Nacionalidad
                 Set piColumnSpan to 6
                 Set piColumnIndex to 0
                 Set peLabelPosition to lpTop
                 Set psLabel to "Nacionalidad"
+                Set psEmptyItemDescription to "Sin nacionalidad"
             End_Object
         End_Object
 

@@ -21,6 +21,57 @@ Class cequipoDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
 
+        Set Key_Field_State Field equipo.ID to True
+
+        // Una vez guardado el registro, el campo pasa a solo lectura
+        Set Field_Option Field equipo.Nombre DD_COMMIT to True
+
+        // Columnas NOT NULL en la base de datos
+        Set Field_Option Field equipo.Nombre DD_REQUIRED to True
+        Set Field_Option Field equipo.LigaID DD_REQUIRED to True
+
     End_Procedure
+
+    // Num. de equipos de la liga. Al guardar un equipo ya existente, Backout llega con la
+    // liga original en el buffer y Update con la nueva: si cambia de liga, se resta en la
+    // vieja y se suma en la nueva; si no cambia, queda igual (-1 +1).
+    // Solo si la operación la empieza este DDO: al guardar un jugador o un entrenador,
+    // el equipo también recibe Backout y Update por ser su padre.
+
+    Procedure Backout
+        Forward Send Backout
+        If (Operation_Origin = Self and Operation_Mode = MODE_SAVING) Begin
+            Subtract 1 from liga.Equipos
+        End
+    End_Procedure
+
+    // Alta o edición: suma en la liga que queda asignada
+    Procedure Update
+        Forward Send Update
+        If (Operation_Origin = Self) Begin
+            Add 1 to liga.Equipos
+        End
+    End_Procedure
+
+    // Borrado del equipo: resta en su liga
+    Procedure Deleting
+        Forward Send Deleting
+        If (Operation_Origin = Self) Begin
+            Subtract 1 from liga.Equipos
+        End
+    End_Procedure
+
+    // Va después de Update: si la liga nueva pasa del máximo, se cancela todo el guardado
+    Function Validate_Save Returns Integer
+        Integer iError
+        Forward Get Validate_Save to iError
+        If (iError) Function_Return iError
+
+        If (Operation_Origin = Self and liga.Equipos > liga.EquiposMax) Begin
+            Send UserError (SFormat("La liga %1 ya tiene el máximo de %2 equipos.", Trim(liga.Nombre), liga.EquiposMax)) "Liga completa"
+            Function_Return 1
+        End
+        Function_Return 0
+    End_Function
 
 End_Class

@@ -1,4 +1,5 @@
 ﻿Use DataDict.pkg
+Use NacionalidadValidationTable.pkg
 
 Open jugador
 Open jugadorposicion
@@ -18,6 +19,19 @@ Class cjugadorDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Key_Field_State Field jugador.ID to True
+
+        // Una vez guardado el registro, el campo pasa a solo lectura
+        Set Field_Option Field jugador.Nombre DD_COMMIT to True
+        Set Field_Option Field jugador.Apellido DD_COMMIT to True
+
+        // Columnas NOT NULL en la base de datos
+        Set Field_Option Field jugador.Nombre DD_REQUIRED to True
+        Set Field_Option Field jugador.Apellido DD_REQUIRED to True
+
+        // Nacionalidad solo de la lista de CodeMast
+        Set Field_Value_Table Field jugador.Nacionalidad to oNacionalidad_VT
 
     End_Procedure
 

@@ -1,4 +1,6 @@
 ﻿Use DataDict.pkg
+Use NacionalidadValidationTable.pkg
+Use cli.pkg
 
 Open entrenador
 Open equipo
@@ -10,12 +12,40 @@ Class centrenadorDataDictionary is a DataDictionary
         Set Main_File to entrenador.File_Number
 
         Set Add_Server_File to equipo.File_Number
+        // Un entrenador puede quedarse sin equipo (EquipoID admite NULL)
+        Set ParentNullAllowed equipo.File_Number to True
+        // Al borrar el equipo, el entrenador no se borra: se queda sin equipo
+        Set CascadeDeleteNull equipo.File_Number to True
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
 
+        Set Key_Field_State Field entrenador.ID to True
+
+        // Una vez guardado el registro, el campo pasa a solo lectura
+        Set Field_Option Field entrenador.Nombre DD_COMMIT to True
+        Set Field_Option Field entrenador.Apellido DD_COMMIT to True
+
+        // Columnas NOT NULL en la base de datos
+        Set Field_Option Field entrenador.Nombre DD_REQUIRED to True
+        Set Field_Option Field entrenador.Apellido DD_REQUIRED to True
+
+        // Nacionalidad solo de la lista de CodeMast
+        Set Field_Value_Table Field entrenador.Nacionalidad to oNacionalidad_VT
+
+    End_Procedure
+
+    // DataFlex no tiene NULL: sin equipo, la FK saldría como 0 y MySQL la rechaza
+    // porque no existe el equipo 0. Se marca la columna como NULL antes de guardar.
+    Procedure Save_Main_File
+        Integer iCampo
+        Field_Map entrenador.File_Number "EquipoID" to iCampo
+        If (entrenador.EquipoID = 0) Begin
+            Set_Attribute DF_FIELD_IS_NULL of entrenador.File_Number iCampo to True
+        End
+        Forward Send Save_Main_File
     End_Procedure
 
 End_Class

@@ -14,6 +14,10 @@ Use cWebColumn.pkg
 
 Use cligaDataDictionary.dd
 Use cequipoDataDictionary.dd
+Use centrenadorDataDictionary.dd
+Use cjugadorDataDictionary.dd
+Use cposicionDataDictionary.dd
+Use cjugadorposicionDataDictionary.dd
 
 Object oZoomLiga is a cWebView
     Set piColumnCount to 12
@@ -34,6 +38,27 @@ Object oZoomLiga is a cWebView
     Object oEquipo_DD is a cequipoDataDictionary
         Set DDO_Server to oLiga_DD
         Set Constrain_File to liga.File_Number
+    End_Object
+
+    // Hijos del equipo: DataFlex los necesita en la vista para borrar en cascada.
+    // Los jugadores (y sus posiciones) se borran; el entrenador se queda sin equipo.
+    Object oEntrenador_DD is a centrenadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+        Set Constrain_File to equipo.File_Number
+    End_Object
+
+    Object oJugador_DD is a cjugadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+        Set Constrain_File to equipo.File_Number
+    End_Object
+
+    Object oPosicion_DD is a cposicionDataDictionary
+    End_Object
+
+    Object oJugadorPosicion_DD is a cjugadorposicionDataDictionary
+        Set DDO_Server to oJugador_DD
+        Set DDO_Server to oPosicion_DD
+        Set Constrain_File to jugador.File_Number
     End_Object
 
     Object oWebMainPanel is a cWebPanel

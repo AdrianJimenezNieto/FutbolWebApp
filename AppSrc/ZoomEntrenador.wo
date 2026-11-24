@@ -7,6 +7,7 @@ Use cWebPanel.pkg
 Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebForm.pkg
+Use cWebCombo.pkg
 Use cWebHtmlBox.pkg
 Use cWebGroup.pkg
 
@@ -37,6 +38,9 @@ Object oZoomEntrenador is a cWebView
 
     Set Main_DD To oEntrenador_DD
     Set Server  To oEntrenador_DD
+
+    // Declarado aquí para que el botón Despedir pueda usar RefProc antes de su definición
+    Register_Procedure DespedirConfirmado Integer eRespuesta
 
 
     Object oWebMainPanel is a cWebPanel
@@ -73,12 +77,14 @@ Object oZoomEntrenador is a cWebView
                 Set psLabel to "Apellido"
             End_Object
 
-            Object oEntrenadorNacionalidad is a cWebForm
+            // Desplegable: las opciones salen de la validation table de la clase DD
+            Object oEntrenadorNacionalidad is a cWebCombo
                 Entry_Item entrenador.Nacionalidad
                 Set piColumnSpan to 6
                 Set piColumnIndex to 0
                 Set peLabelPosition to lpTop
                 Set psLabel to "Nacionalidad"
+                Set psEmptyItemDescription to "Sin nacionalidad"
             End_Object
         End_Object
 
@@ -96,6 +102,7 @@ Object oZoomEntrenador is a cWebView
                 Set peLabelPosition to lpTop
                 Set psLabel to "Equipo"
                 Set psCSSClass to "CampoPadre"
+                Set psPlaceHolder to "Sin equipo"
                 Set pbPromptButton to True
 
                 WebRegisterPath ntNavigateForward oSelectEquipo
@@ -118,8 +125,41 @@ Object oZoomEntrenador is a cWebView
                     Send NavigatePath
                 End_Procedure
             End_Object
+
+            // Solo en modo edición y con equipo (ver SetActionButtons)
+            Object oDespedirBtn is a cWebButton
+                Set psCaption to "Despedir"
+                Set piColumnSpan to 4
+                Set piColumnIndex to 0
+                Set psCSSClass to "BotonNav"
+                Set pbRender to False
+
+                Procedure OnClick
+                    // La respuesta va a la vista, que es donde está publicado DespedirConfirmado
+                    Send ShowYesNo oZoomEntrenador (RefProc(DespedirConfirmado)) ;
+                        (SFormat("¿Despedir a %1 %2? Se quedará sin equipo.", Trim(entrenador.Nombre), Trim(entrenador.Apellido))) ;
+                        "Despedir entrenador"
+                End_Procedure
+            End_Object
         End_Object
     End_Object
+
+    // Deja al entrenador sin equipo: se vacía el DDO del equipo y se guarda.
+    // La clase DD admite el padre nulo y manda EquipoID como NULL.
+    // Tras despedir, la vista no se cierra al guardar (ver OnViewSaved)
+    Property Boolean pbDespidiendo False
+
+    Procedure DespedirConfirmado Integer eRespuesta
+        If (eRespuesta = cmYes) Begin
+            Set pbDespidiendo to True
+            Send Request_ClearBindingTable of oEquipoNombre
+            Send Request_Save of oEntrenador_DD
+            Set pbDespidiendo to False
+            Send SetActionButtons
+        End
+    End_Procedure
+
+    WebPublishProcedure DespedirConfirmado
 
     Object oActionGroup is a cWebMenuGroup
 
@@ -168,11 +208,17 @@ Object oZoomEntrenador is a cWebView
     Procedure SetActionButtons
         tWebNavigateData NavigateData
         Boolean bHasRecord
+        Integer iEquipoID
         Handle hoDD
 
         Get Server to hoDD
         Get GetNavigateData to NavigateData
         Get HasRecord of hoDD to bHasRecord
+        // Se mira la FK del propio entrenador y no el DDO del equipo
+        Get Field_Current_Value of oEntrenador_DD Field entrenador.EquipoID to iEquipoID
+
+        // Despedir: solo al editar un entrenador guardado que tenga equipo
+        WebSet pbRender of oDespedirBtn to (not(NavigateData.bReadOnly) and bHasRecord and iEquipoID <> 0)
 
         // let's hide all buttons and then Show the ones we want
         WebSet pbRender of oEditBtn to False
@@ -191,8 +237,10 @@ Object oZoomEntrenador is a cWebView
     End_Procedure
 
     Procedure OnViewSaved Handle hoServer Boolean bChanged
-        // Close after save
-        Send NavigateClose Self
+        // Close after save, salvo al despedir: se queda abierta con «Sin equipo»
+        If (not(pbDespidiendo(Self))) Begin
+            Send NavigateClose Self
+        End
     End_Procedure
 
     // this will close the view after a delete
