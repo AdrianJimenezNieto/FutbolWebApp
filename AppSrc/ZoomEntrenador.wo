@@ -39,6 +39,9 @@ Object oZoomEntrenador is a cWebView
     Set Main_DD To oEntrenador_DD
     Set Server  To oEntrenador_DD
 
+    // Declarado aquí para que el botón Despedir pueda usar RefProc antes de su definición
+    Register_Procedure DespedirConfirmado Integer eRespuesta
+
 
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
@@ -122,6 +125,22 @@ Object oZoomEntrenador is a cWebView
                     Send NavigatePath
                 End_Procedure
             End_Object
+
+            // Solo en modo edición y con equipo (ver SetActionButtons)
+            Object oDespedirBtn is a cWebButton
+                Set psCaption to "Despedir"
+                Set piColumnSpan to 4
+                Set piColumnIndex to 0
+                Set psCSSClass to "BotonNav"
+                Set pbRender to False
+
+                Procedure OnClick
+                    // La respuesta va a la vista, que es donde está publicado DespedirConfirmado
+                    Send ShowYesNo oZoomEntrenador (RefProc(DespedirConfirmado)) ;
+                        (SFormat("¿Despedir a %1 %2? Se quedará sin equipo.", Trim(entrenador.Nombre), Trim(entrenador.Apellido))) ;
+                        "Despedir entrenador"
+                End_Procedure
+            End_Object
         End_Object
     End_Object
 
@@ -164,18 +183,6 @@ Object oZoomEntrenador is a cWebView
 
         End_Object 
 
-        Object oDespedirBtn is a cWebMenuItem
-            Set psCSSClass to "WebIcon_Clear"
-            Set psCaption to "Despedir"
-
-            Procedure OnClick
-                Send ShowYesNo Self (RefProc(DespedirConfirmado)) ;
-                    (SFormat("¿Despedir a %1 %2? Se quedará sin equipo.", Trim(entrenador.Nombre), Trim(entrenador.Apellido))) ;
-                    "Despedir entrenador"
-            End_Procedure
-
-        End_Object
-
         Object oDeleteBtn is a cWebMenuItem
             Set psCSSClass to "WebDeleteMenuItem"
             Set psCaption to "Eliminar"
@@ -210,8 +217,8 @@ Object oZoomEntrenador is a cWebView
         // Se mira la FK del propio entrenador y no el DDO del equipo
         Get Field_Current_Value of oEntrenador_DD Field entrenador.EquipoID to iEquipoID
 
-        // Despedir solo tiene sentido con un entrenador guardado que tenga equipo
-        WebSet pbRender of oDespedirBtn to (bHasRecord and iEquipoID <> 0)
+        // Despedir: solo al editar un entrenador guardado que tenga equipo
+        WebSet pbRender of oDespedirBtn to (not(NavigateData.bReadOnly) and bHasRecord and iEquipoID <> 0)
 
         // let's hide all buttons and then Show the ones we want
         WebSet pbRender of oEditBtn to False
